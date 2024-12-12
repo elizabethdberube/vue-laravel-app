@@ -22,6 +22,12 @@ Route::get('/{vue_capture?}', function () {
     return view('welcome');
 })->where('vue_capture', '[\/\w\.-]*');
 
+
+
+Route::get('/', [App\Http\Controllers\WelcomeController::class, 'welcome'])->name('welcome');
+
+
+// Route::get('/about', [App\Http\Controllers\AboutController::class, 'about'])->name('about');
 // Auth::routes();
 
 

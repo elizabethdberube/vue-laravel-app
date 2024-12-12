@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Category extends Model
+class Task extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -17,12 +17,12 @@ class Category extends Model
      *
      * @var array<int, string>
      */
-    protected $Category = [
+    protected $Task = [
         'id',
-        'category_name',
-        'category_status',
-        'category_created_on',
-        'category_updated_on',
+        'title',
+        'description',
+        'status',
+  
     ];
 
 

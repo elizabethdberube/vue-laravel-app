@@ -18,6 +18,9 @@ and then restart your shell.
 
 ` npm i`
 
+`nvm use 20`
+
+`npx vite build`
 
 #### after sourcing schema and running seeds
 
