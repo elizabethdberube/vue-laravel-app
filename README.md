@@ -1,4 +1,4 @@
-# PHP-Practice
+
 
 ## setup
 
@@ -16,7 +16,7 @@ and then restart your shell.
 
 ` sail up `
 
-` npm i && npm run dev `
+` npm i`
 
 
 #### after sourcing schema and running seeds

@@ -4,7 +4,6 @@ CREATE DATABASE task_db;
 
 USE task_db;
 
-DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 name TEXT NULL,
@@ -12,15 +11,12 @@ email TEXT NULL,
 password TEXT NULL,
 updated_at DATE,
 created_at DATE
-
 );
 
-DROP TABLE IF EXISTS categories;
-CREATE TABLE categories (
+CREATE TABLE tasks (
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 title TEXT NULL,
 description TEXT NULL,
-status TINYINT,
-   
+status TINYINT
 );
 
