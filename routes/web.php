@@ -1,10 +1,11 @@
  <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsersController;
-use App\Http\Controllers\LibraryController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\PermissionsController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Task;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,40 +24,37 @@ Route::get('/{vue_capture?}', function () {
 })->where('vue_capture', '[\/\w\.-]*');
 
 
+Route::get('/api/tasks', function () {
+    $tasks = Task::find()->all();
+    return $tasks;
+});
 
-// Route::get('/', [App\Http\Controllers\WelcomeController::class, 'welcome'])->name('welcome');
+Route::put('/api/tasks/{id}', function (Request $request) {
+      # Update the new email
+      Task::whereId(auth()->task()->id)->update([
+        'task' => $request->input('task')
+    ]);
 
+    return  back()->with("statusOne", "Task changed successfully!");
+});
+Route::post('/api/tasks/{id}', function (Request $request, $id) {
+    $data = array( 'id'=>$request->input('id'),
+    'id'=>$request->input('id'),
+    'title'=>$request->input('title'),
+    'description'=>$request->input('title'),
+    'status'=>$request->input('status'),
+ 
+);
 
-// Route::get('/about', [App\Http\Controllers\AboutController::class, 'about'])->name('about');
-// Auth::routes();
+Task::create($request->all());
 
+    return  back()->with("statusOne", "Task created successfully!");
+});
 
-// Route::group(['middleware' => ['auth']], function() {
-//     /**
-//     * Logout Route
-//     */
-//     Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
-//  });
+Route::delete('/api/tasks/{id}', function (Task $task) {
 
-
-
-// Route::group(['middleware' => ['auth', 'permission']], function() {
-
-
-// });
-
-/**
- * User Routes
- */
-// Route::group(['prefix' => 'roles'], function() {
-
-// });
-
-// Route::group(['prefix' => 'permissions'], function() {
-
-// });
-
-// Route::resource('roles', RolesController::class);
-// Route::resource('permissions', PermissionsController::class);
-
+    $role->delete();
+    
+    return  back()->with("statusOne", "Task deleted successfully!");
+});
 
