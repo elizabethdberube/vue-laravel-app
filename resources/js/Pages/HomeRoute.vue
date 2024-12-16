@@ -13,10 +13,14 @@ const getValue = async () => {
 };
 
 <template>
-    <div>
-        <h2>HOME</h2>
-        <router-link to="/test"> Take me to Test page </router-link>
-        <button @click.prevent="tiggerEndpoint">Trigger Endpoint</button>
-        <p v-if="response">{{ response.data }}</p>
+
+
+  <div class="container">
+    <div style="margin-top: 80px;" class="jumbotron text-center">
+      <h1 class="display-4">Note Taker <span role="img" aria-label="Memo">📝</span></h1>
+      <h4 class="mt-4">Take notes with Express</h4>
+    <router-link to="/test" lass="btn btn-primary btn-lg mt-4" > Let's take some notes </router-link>
     </div>
+  </div>
+
 </template>

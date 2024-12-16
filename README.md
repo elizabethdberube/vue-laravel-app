@@ -28,12 +28,17 @@ and then restart your shell.
 
 ## start application
 
+In one terminal run:
 ` sail up `
 
+In second terminal run:
+
+`nvm use 20`
 ` npm run dev `
 
 ### if not using alias
 ` ./vendor/bin/sail up `
+
 ` npm run dev `
 
 ## troubleshooting
@@ -63,4 +68,8 @@ admin:
 admin@gmail.com
 passsword:
 P0t4?6wen
+
+## check logs
+run the following command:
+`less./storage/logs/laravel.log`
 

@@ -1,4 +1,4 @@
-<!-- <?php
+ <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
@@ -24,7 +24,7 @@ Route::get('/{vue_capture?}', function () {
 
 
 
-Route::get('/', [App\Http\Controllers\WelcomeController::class, 'welcome'])->name('welcome');
+// Route::get('/', [App\Http\Controllers\WelcomeController::class, 'welcome'])->name('welcome');
 
 
 // Route::get('/about', [App\Http\Controllers\AboutController::class, 'about'])->name('about');
