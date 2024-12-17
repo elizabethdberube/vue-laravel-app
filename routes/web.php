@@ -25,7 +25,8 @@ Route::get('/{vue_capture?}', function () {
 
 
 Route::get('/api/tasks', function () {
-    $tasks = Task::find()->all();
+    $taskDate = Task::find()->all();
+    $tasks = json_encode($taskDate);
     return $tasks;
 });
 
