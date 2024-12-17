@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Models\Task;
 
 class TasksController extends Controller
@@ -24,12 +24,14 @@ class TasksController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index(Request $request)
+    public function tasks(Request $request)
     {
-
-        $taskDate = Task::find()->all();
-        $tasks = json_encode($taskDate);
-        return $tasks;
+ 
+      $taskData = Task::find()->all(); 
+      $tasks = json_encode($taskData); 
+      
+   
+      return response($tasks, 200) ->header('Content-Type', 'application/json');
         
     }
 

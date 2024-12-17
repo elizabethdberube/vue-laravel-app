@@ -21,8 +21,5 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get("/test-me", function () {
-    return 'Hello from Laravel!';
-});
 
 

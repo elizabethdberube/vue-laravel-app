@@ -34,15 +34,16 @@ let activeTask = {};
 
 const getTasks = () =>
 
-  fetch('/api/tasks.json', {
+  fetch('/api/tasks', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
   })
-    .then((respnse) => respnse.json())
+    .then((response) => response.json())
 
     .then((data) => data)
+    
     .catch((error) => {
       console.error('Error:', error);
     });
@@ -56,7 +57,7 @@ const saveTask = (task) =>
 
     body: JSON.stringify(task),
 
-  });
+  }).catch((err) => res.status(400).json(err));
 
 
 
@@ -69,7 +70,7 @@ const updateTask = (task) =>
 
     body: JSON.stringify(task),
 
-  });
+  }).catch((err) => res.status(400).json(err));
 
 
 
@@ -79,7 +80,7 @@ const deleteTask = (id) =>
     headers: {
       'Content-Type': 'application/json',
     },
-  });
+  }).catch((err) => res.status(400).json(err));
 
 
 const renderActiveTask = () => {
