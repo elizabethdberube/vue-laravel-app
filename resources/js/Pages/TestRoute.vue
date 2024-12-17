@@ -34,7 +34,7 @@ let activeTask = {};
 
 const getTasks = () =>
 
-  fetch('/api/tasks', {
+  fetch('/api/tasks.json', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -248,7 +248,7 @@ getAndRenderTasks();
       </div>
       <div class="col-8">
         <div id="informDiv"></div>
-        <input class="task-title" placeholder="Task Title" maxlength="28" type="text" />
+        <input class="form-control task-title"  placeholder="Task Title" maxlength="28" type="text" />
         <textarea class="task-textarea" placeholder="Task Text"></textarea>
       </div>
     </div>
