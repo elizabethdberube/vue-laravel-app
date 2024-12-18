@@ -19,19 +19,18 @@ use App\Http\Controllers\TasksController;
 */
 
 
+Auth::routes();
 
 
+Route::group(['middleware' => ['auth']], function() {
+    /**
+    * Logout Route
+    */
+    Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+ });
 
 
 
 Route::get('/{vue_capture?}', function () {
     return view('welcome');
 })->where('vue_capture', '[\/\w\.-]*');
-
-Route::get('/api/tasks', [App\Http\Controllers\TasksController::class, 'tasks'])->name('tasks');
-
-Route::post('/api/tasks/{id}', [App\Http\Controllers\TasksController::class, 'create'])->name('create');
-
-Route::put('/api/tasks/{id}', [App\Http\Controllers\TasksController::class, 'update'])->name('update');
-
-Route::delete('/api/tasks/{id}', [App\Http\Controllers\TasksController::class, 'delete'])->name('delete');
