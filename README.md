@@ -8,7 +8,7 @@
 ` sail  artisan db:seed --class=CreateAdminUserSeeder `
 
 
-#### add alias to .bashrc file
+add alias to .bashrc file
 ` alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail' `
 and then restart your shell.
 
@@ -16,9 +16,11 @@ and then restart your shell.
 
 ` sail up `
 
-` npm i`
+In seperate terminal:
 
 `nvm use 20`
+
+` npm i`
 
 `npx vite build`
 

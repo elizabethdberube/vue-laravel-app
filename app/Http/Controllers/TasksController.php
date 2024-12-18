@@ -27,11 +27,12 @@ class TasksController extends Controller
     public function tasks(Request $request)
     {
  
-      $taskData = Task::all(); 
+      $taskData = Task::paginate(1); 
+      
       $tasks = json_encode($taskData); 
       
    
-      return response($tasks, 200) ->header('Content-Type', 'application/json');
+      return response($taskData, 200) ->header('Content-Type', 'application/json');
         
     }
 

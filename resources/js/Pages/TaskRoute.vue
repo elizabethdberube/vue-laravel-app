@@ -4,25 +4,30 @@ import "../bootstrap.js";
 import { ref, onMounted } from "vue";
 import axios from 'axios';
 import vueCustomScrollbar from 'vue-custom-scrollbar';
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
 
 
 export default {
   data() {
     return {
-      items: []
+      items: [],
+     response: ref({})
     };
   },
   mounted() {
- axios.get('/api/tasks') 
-          .then(response => {
-            this.items = response.data;
-          })
-        .catch((err) => res.status(400).json(err));
+ this.getResults();
   },
 
  // methods go in here
   methods: {
 
+     async getResults(page = 1) {
+
+        const response = await fetch(`/api/tasks`);
+        this.response = (await response.json());
+        this.items = this.response.data;
+            console.log(response);
+    }, 
 
    async saveTask() {
     const task = { 
@@ -108,6 +113,7 @@ deleteTask: async (item) =>{
   }
   }
   };
+
 </script>
 <template>
    <nav class="navbar navbar-dark bg-dark">
@@ -118,10 +124,11 @@ deleteTask: async (item) =>{
 
   <div class="container-fluid">
     <div class="row">
+
       <div class="col-4 listcontainer" ref="listcontainer">
         <div class="card ">
         
-   
+
 
         <nav aria-label="Page navigation example">
           <ul class="list-group pagination">
@@ -134,7 +141,7 @@ deleteTask: async (item) =>{
              <input type="text" class="form-control" id="description" v-model="item.description" >
           
               <div class="custom-control custom-checkbox mb-2">
-              <input type="checkbox" class="custom-control-input"  v-model="item.status" value="item.status">
+              <input type="checkbox" class="custom-control-input"  v-model="item.status" true-value=1 false-value=0>
               <label class="custom-control-label" for="customCheck1">&nbsp;Completed</label>
               </div>
             <button class="btn btn-secondary btn-sm mx-2" @click="deleteTask(item)">Delete Task</button>
@@ -143,8 +150,11 @@ deleteTask: async (item) =>{
              </form>
           </li>
           </ul>
-          </nav>
-      
+        </nav>
+                 <Bootstrap5Pagination
+        :data="response"
+        @pagination-change-page="getResults"/>
+        
        
         </div>
       </div>
