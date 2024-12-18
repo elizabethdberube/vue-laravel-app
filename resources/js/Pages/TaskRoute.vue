@@ -18,8 +18,8 @@ export default {
         this.items = response.data;
       })
      .catch((err) => res.status(400).json(err));
-  }
-};
+  },
+
 
  // methods go in here
   methods: {
@@ -85,6 +85,7 @@ deleteTask: async (id) =>{
   
   }
 
+  }
   }
   }
   };
