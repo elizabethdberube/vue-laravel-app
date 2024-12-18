@@ -14,10 +14,10 @@ class TasksController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     /**
      * Show the application dashboard.
@@ -27,7 +27,7 @@ class TasksController extends Controller
     public function tasks(Request $request)
     {
  
-      $taskData = Task::find()->all(); 
+      $taskData = Task::all(); 
       $tasks = json_encode($taskData); 
       
    

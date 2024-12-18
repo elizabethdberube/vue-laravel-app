@@ -6,8 +6,12 @@ const routes = [
         component: () => import("./../Pages/HomeRoute.vue"),
     },
     {
-        path: "/api/tasks",
+        path: "/tasks",
         component: () => import("./../Pages/TaskRoute.vue"),
+    },
+    {
+        path: "/inspire",
+        component: () => import("./../Pages/InspireRoute.vue"),
     },
 ];
 

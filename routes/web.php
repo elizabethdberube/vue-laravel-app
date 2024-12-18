@@ -22,15 +22,13 @@ use App\Http\Controllers\TasksController;
 Auth::routes();
 
 
-Route::group(['middleware' => ['auth']], function() {
-    /**
-    * Logout Route
-    */
-    Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
- });
 
 
+ Route::get("/tasks", function () {
+    return view('welcome');
+});
 
+//  Route::get('/tasks', [App\Http\Controllers\TasksController::class, 'tasks'])->name('tasks');
 Route::get('/{vue_capture?}', function () {
     return view('welcome');
 })->where('vue_capture', '[\/\w\.-]*');

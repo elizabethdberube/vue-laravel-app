@@ -1,256 +1,135 @@
 <script>
 import './style.css'
 import "../bootstrap.js";
-let areweOnTaskPage = window.location.pathname == '/tasks';
+import { ref, onMounted } from "vue";
+import axios from 'axios';
+import vueCustomScrollbar from 'vue-custom-scrollbar';
 
-let taskTitle;
-let taskText;
-let saveTaskBtn;
-let newTaskBtn;
-let taskList;
 
-if (areweOnTaskPage) {
-  taskTitle = document.querySelector('.task-title');
-  taskText = document.querySelector('.task-textarea');
-  saveTaskBtn = document.querySelector('.save-task');
-  newTaskBtn = document.querySelector('.new-task');
-  taskList = document.querySelectorAll('.list-container .list-group');
-}
-
-// Show an element
-const show = (elem) => {
-  elem.style.display = 'inline';
-
+export default {
+  data() {
+    return {
+      items: []
+    };
+  },
+  mounted() {
+    axios.get('/api/tasks') 
+      .then(response => {
+        this.items = response.data;
+      })
+     .catch((err) => res.status(400).json(err));
+  }
 };
 
-// hide an element
-const hide = (elem) => {
-  elem.style.display = 'none';
+ // methods go in here
+  methods: {
 
-};
-
-// activeTask is used to keep track of the task in the textarea
-let activeTask = {};
-
-const getTasks = () =>
-
-  fetch('/api/tasks', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => response.json())
-
-    .then((data) => data)
-    
-    .catch((error) => {
-      console.error('Error:', error);
+   saveTask: async (task) => {
+  try {
+    const response = await axios.post('/api/tasks', task, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-
-const saveTask = (task) =>
-  fetch('/api/tasks', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-
-    body: JSON.stringify(task),
-
-  }).catch((err) => res.status(400).json(err));
-
-
-
-const updateTask = (task) =>
-  fetch('/api/tasks', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-
-    body: JSON.stringify(task),
-
-  }).catch((err) => res.status(400).json(err));
-
-
-
-const deleteTask = (id) =>
-  fetch(`/api/tasks/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }).catch((err) => res.status(400).json(err));
-
-
-const renderActiveTask = () => {
-  hide(saveTaskBtn);
-
-  if (activeTask.id) {
-    taskTitle.setAttribute('readonly', true);
-    taskText.setAttribute('readonly', true);
-    taskTitle.value = activeTask.title;
-    taskText.value = activeTask.task;
-
-  } else {
-    taskTitle.removeAttribute('readonly');
-    taskText.removeAttribute('readonly');
-    taskTitle.value = '';
-    taskText.value = '';
-  }
-};
-
-const handleTaskSave = () => {
-
-  const newTask = {
-    title: taskTitle.value,
-    task: taskText.value,
-
-  };
-
-  saveTask(newTask).then(() => {
-    getAndRenderTasks();
-    renderActiveTask();
-
-  });
-
-};
-
-// Delete the clicked task
-const handleTaskDelete = (e) => {
-  // Prevents the click listener for the list from being called when the button inside of it is clicked
-  e.stopPropagation();
-
-  const task = e.target;
-  const taskId = JSON.parse(task.parentElement.getAttribute('data-task')).id;
-
-  if (activeTask.id === taskId) {
-    activeTask = {};
-
-  }
-
-  deleteTask(taskId).then(() => {
-    getAndRenderTasks();
-    renderActiveTask();
-  });
-};
-
-// Sets the activeTask and displays it
-const handleTaskView = (e) => {
-  e.preventDefault();
-  activeTask = JSON.parse(e.target.parentElement.getAttribute('data-task'));
-  renderActiveTask();
-
-};
-
-// Sets the activeTask to and empty object and allows the user to enter a new task
-const handleNewTaskView = (e) => {
-  activeTask = {};
-  renderActiveTask();
-};
-
-const handleRenderSaveBtn = () => {
-  if (!taskTitle.value.trim() || !taskText.value.trim()) {
-    hide(saveTaskBtn);
-  } else {
-    show(saveTaskBtn);
-  }
-};
-
-let taskListItems = [];
-// Render the list of task titles
-const renderTaskList = async (tasks) => {
-
-  let jsonTasks = JSON.parse(await tasks);
-  if (areweOnTaskPage) {
-
-    taskListItems.forEach((el) => (taskList[0].removeChild(el)));
-    taskListItems = [];
-
-  }
-
-
-  // Returns HTML element with or without a delete button
-  const createLi = (task, delBtn = true) => {
-    const liEl = document.createElement('li');
-    liEl.classList.add('list-group-item');
-
-    const spanEl = document.createElement('span');
-    spanEl.classList.add('list-item-title');
-
-    spanEl.innerText = task;
-
-    spanEl.addEventListener('click', handleTaskView);
-
-    liEl.append(spanEl);
-
-    if (delBtn) {
-      const delBtnEl = document.createElement('i');
-      delBtnEl.classList.add(
-        'fas',
-        'fa-trash-alt',
-        'float-right',
-        'text-danger',
-        'delete-task'
-      );
-      delBtnEl.addEventListener('click', handleTaskDelete);
-
-      liEl.append(delBtnEl);
-
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.status === 400) {
+      console.error('400 Error:', err.response.data);
+      // Handle the 400 error specifically here
+    } else {
+      console.error('Error:', err);
+      // Handle other errors
     }
+    throw err; // Optional: Re-throw the error to handle it elsewhere
+  }},
+   
 
-    return liEl;
+
+updateTask: async (id) =>{
+  try {
+    const response = await axios.put('/api/tasks', task, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (err) {
+    if (err.response && err.response.status === 400) {
+      console.error('400 Error:', err.response.data);
+      // Handle the 400 error specifically here
+    } else {
+      console.error('Error:', err);
+      // Handle other errors
+    }
+    },
+ 
+  
+ 
+deleteTask: async (id) =>{
+  try {
+    const response = await axios.delete(`/api/tasks/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  console.log('Task deleted:', response.data); // Remove the task from items after deletion 
+  items.value = items.value.filter(task => task.id !== id);
+  } catch (err) {
+    if (err.response && err.response.status === 400) {
+      console.error('400 Error:', err.response.data);
+      // Handle the 400 error specifically here
+    } else {
+      console.error('Error:', err);
+      // Handle other errors
+    }
+  
+  }
+
+  }
+  }
   };
-
-  if (jsonTasks.length === 0) {
-    taskListItems.push(createLi('No saved Tasks', false));
-  }
-
-  jsonTasks.forEach((task) => {
-    const li = createLi(task.title);
-    li.dataset.task = JSON.stringify(task);
-    taskListItems.push(li);
-
-  });
-
-  if (areweOnTaskPage) {
-    taskListItems.forEach((task) => taskList[0].append(task));
-  }
-
-};
-
-// Gets tasks from the db and renders them to the sidebar
-const getAndRenderTasks = () => getTasks().then(renderTaskList);
-
-if (areweOnTaskPage) {
-  saveTaskBtn.addEventListener('click', handleTaskSave);
-  newTaskBtn.addEventListener('click', handleNewTaskView);
-  taskTitle.addEventListener('keyup', handleRenderSaveBtn);
-  taskText.addEventListener('keyup', handleRenderSaveBtn);
-
-}
-
-getAndRenderTasks();
 </script>
 <template>
 <nav class="navbar navbar-dark bg-dark">
-    <a class="navbar-brand" href="/">Task Taker </a>
+ 
+    <a class="navbar-brand mx-2" href="/">Task Manager <span role="img" aria-label="Memo">📝</span></a>
     <div class="icons">
-      <i class="fas fa-save text-light save-task"></i>
-      <i class="fas fa-plus text-light new-task"></i>
+      <i class="fas fa-save text-light savetask" ref="savetask" @click="handleTaskSave"></i>
+      <i class="fas fa-plus text-light newtask" ref="newtask" @click="handleNewTaskView"></i>
     </div>
   </nav>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-4 list-container">
-        <div class="card">
-          <ul class="list-group"></ul>
+      <div class="col-4 listcontainer" ref="listcontainer">
+        <div class="card scrollable-container">
+        
+     
+       <ul class="list-group">
+          <li v-for="item in items" :key="item.id" class="list-group-item" >
+       
+            <label class="card-title" for="title"><h5>Title:</h5></label>
+             <input type="text" class="form-control" id="title" v-model="item.title" @input="updateTask(item.id)">
+           <label class="custom-control-label" for="description">Description:</label>
+             <input type="text" class="form-control" id="description" v-model="item.description" @input="updateTask(item.id)">
+          
+          <div class="custom-control custom-checkbox mb-2">
+          <input type="checkbox" class="custom-control-input"  v-model="item.status" @input="handleTaskSave(item.id)">
+          <label class="custom-control-label" for="customCheck1">&nbsp;Completed</label>
+        </div>
+            <button class="btn btn-secondary btn-sm mx-2" @click="deleteTask(item.id)">Delete Task</button>
+
+            <button class="btn btn-secondary btn-sm" @click="updateTask(item.id)">Update Task</button>
+          </li>
+       </ul>
         </div>
       </div>
       <div class="col-8">
         <div id="informDiv"></div>
-        <input class="form-control task-title"  placeholder="Task Title" maxlength="28" type="text" />
-        <textarea class="task-textarea" placeholder="Task Text"></textarea>
+        <input @keyup="handleTaskSave" class="form-control tasktitle" ref="tasktitle" placeholder="Task Title" maxlength="28" type="text" />
+        <br>
+        <textarea @keyup="handleTaskSave" class="tasktextarea"   ref="tasktextarea" placeholder="Task Description"></textarea>
+ 
+        <button class="btn btn-secondary" @click="handleTaskSave">Save Task</button>
       </div>
     </div>
   </div>
