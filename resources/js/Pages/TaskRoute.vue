@@ -1,10 +1,13 @@
+<script setup>
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+</script>
 <script>
 import './style.css'
 import "../bootstrap.js";
 import { ref, onMounted } from "vue";
 import axios from 'axios';
 import vueCustomScrollbar from 'vue-custom-scrollbar';
-import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+
 
 
 export default {
@@ -23,7 +26,7 @@ export default {
 
      async getResults(page = 1) {
 
-        const response = await fetch(`/api/tasks`);
+        const response = await fetch(`/api/tasks?page=${page}`);
         this.response = (await response.json());
         this.items = this.response.data;
             console.log(response);
@@ -119,7 +122,9 @@ deleteTask: async (item) =>{
    <nav class="navbar navbar-dark bg-dark">
  
     <a class="navbar-brand mx-2" href="/">Task Manager <span role="img" aria-label="Memo">📝</span></a>
-
+ 
+       <a class="navbar-brand mx-2" href="/inspire">Inspiration
+    </a>
    </nav>
 
   <div class="container-fluid">

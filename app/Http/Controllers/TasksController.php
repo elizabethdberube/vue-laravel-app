@@ -27,11 +27,8 @@ class TasksController extends Controller
     public function tasks(Request $request)
     {
  
-      $taskData = Task::paginate(1); 
-      
-      $tasks = json_encode($taskData); 
-      
-   
+      $taskData = Task::paginate(4); 
+         
       return response($taskData, 200) ->header('Content-Type', 'application/json');
         
     }

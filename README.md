@@ -2,11 +2,11 @@
 
 ## setup
 
-` composer require laravel/sail --dev `
+  add .env 
 
-` php artisan sail:install `
-` sail  artisan db:seed --class=CreateAdminUserSeeder `
+`composer require laravel/sail --dev `
 
+`php artisan sail:install `
 
 add alias to .bashrc file
 ` alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail' `
@@ -18,15 +18,29 @@ and then restart your shell.
 
 In seperate terminal:
 
+`mysql -h 127.0.0.1 -P 3307 -u root -p`
+Enter password
+
+`use task_db`
+
+`source ./databse/schema.sql`
+
+`source ./databse/sample_data.sql`
+
+`exit`
+
+`sail artisan migrate `
+
+In seperate terminal:
+
 `nvm use 20`
 
-` npm i`
+`npm i`
 
 `npx vite build`
 
-#### after sourcing schema and running seeds
+`npm run dev `
 
-` sail artisan migrate `
 
 ## start application
 
@@ -63,13 +77,11 @@ then run again
  ## login
  user:
  fakeuser@gmail.com
+
  password:
  password
 
-admin:
-admin@gmail.com
-passsword:
-P0t4?6wen
+
 
 ## check logs
 run the following command:
