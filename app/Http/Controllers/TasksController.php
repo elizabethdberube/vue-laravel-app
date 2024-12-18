@@ -38,31 +38,37 @@ class TasksController extends Controller
     public function create(Request $request)
     {
 
-        Task::whereId(auth()->task()->id)->update([
-            'task' => $request->input('task')
-        ]);
-    
-        return  back()->with("statusOne", "Task changed successfully!");
+        $data = array( 
+        'title'=>$request->input('title'),
+        'description'=>$request->input('description'),
+        'status'=>$request->input('status'),
+     
+    );
+    Task::create($request->all());
+
+        return  response( "Task created successfully!", 200);
         
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-
-        Task::whereId(auth()->task()->id)->update([
-            'task' => $request->input('task')
+   
+        Task::whereId($id)->update([
+        'title'=>$request->input('title'),
+        'description'=>$request->input('description'),
+        'status'=>$request->input('status'),
         ]);
     
-        return  back()->with("statusOne", "Task changed successfully!");
+        return  response( "Task updated successfully!", 200);
         
     }
 
-    public function delete(Task $task)
+    public function delete(Request $request, $id)
     {
-
+        $task = Task::find($id);
         $task->delete();
     
-        return  back()->with("statusOne", "Task deleted successfully!");
+        return response( "Task deleted successfully!", 200);
         
     }
 }

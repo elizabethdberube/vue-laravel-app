@@ -17,6 +17,11 @@ class Task extends Model
      *
      * @var array<int, string>
      */
+
+     protected $fillable = ['title', 'description', 'status'];
+
+    public $timestamps = false;
+
     protected $Task = [
         'id',
         'title',

@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/tasks', [App\Http\Controllers\TasksController::class, 'tasks'])->name('tasks');
 
-Route::post('/tasks/{id}', [App\Http\Controllers\TasksController::class, 'create'])->name('create');
+Route::post('/tasks', [App\Http\Controllers\TasksController::class, 'create'])->name('create');
 
 Route::put('/tasks/{id}', [App\Http\Controllers\TasksController::class, 'update'])->name('update');
 

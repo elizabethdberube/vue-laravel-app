@@ -13,25 +13,33 @@ export default {
     };
   },
   mounted() {
-    axios.get('/api/tasks') 
-      .then(response => {
-        this.items = response.data;
-      })
-     .catch((err) => res.status(400).json(err));
+ axios.get('/api/tasks') 
+          .then(response => {
+            this.items = response.data;
+          })
+        .catch((err) => res.status(400).json(err));
   },
-
 
  // methods go in here
   methods: {
 
-   saveTask: async (task) => {
+
+   async saveTask() {
+    const task = { 
+      id: this.id, 
+      title: this.title, 
+      description: this.description, 
+      status: this.status,
+
+    };
+    console.log(task);
   try {
     const response = await axios.post('/api/tasks', task, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    return response.data;
+   location.reload();
   } catch (err) {
     if (err.response && err.response.status === 400) {
       console.error('400 Error:', err.response.data);
@@ -43,16 +51,27 @@ export default {
     throw err; // Optional: Re-throw the error to handle it elsewhere
   }},
    
+async updateTask(item){
 
+   const task = { 
+      id: item.id, 
+      title: item.title, 
+      description: item.description, 
+      status: item.status,
 
-updateTask: async (id) =>{
+    };
+  console.log(task);
+  let id = task.id;
+  let url = `/api/tasks/${id}`
+  
   try {
-    const response = await axios.put('/api/tasks', task, {
+    const response = await axios.put(url, task, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    return response.data;
+ 
+ location.reload();
   } catch (err) {
     if (err.response && err.response.status === 400) {
       console.error('400 Error:', err.response.data);
@@ -60,20 +79,22 @@ updateTask: async (id) =>{
     } else {
       console.error('Error:', err);
       // Handle other errors
-    }
+    }}
     },
  
-  
+deleteTask: async (item) =>{
+
+   let id = item.id;
+  let url = `/api/tasks/${id}`
  
-deleteTask: async (id) =>{
   try {
-    const response = await axios.delete(`/api/tasks/${id}`, {
+    const response = await axios.delete(url, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
-  console.log('Task deleted:', response.data); // Remove the task from items after deletion 
-  items.value = items.value.filter(task => task.id !== id);
+
+   location.reload();
   } catch (err) {
     if (err.response && err.response.status === 400) {
       console.error('400 Error:', err.response.data);
@@ -83,55 +104,64 @@ deleteTask: async (id) =>{
       // Handle other errors
     }
   
-  }
-
   }
   }
   }
   };
 </script>
 <template>
-<nav class="navbar navbar-dark bg-dark">
+   <nav class="navbar navbar-dark bg-dark">
  
     <a class="navbar-brand mx-2" href="/">Task Manager <span role="img" aria-label="Memo">📝</span></a>
-    <div class="icons">
-      <i class="fas fa-save text-light savetask" ref="savetask" @click="handleTaskSave"></i>
-      <i class="fas fa-plus text-light newtask" ref="newtask" @click="handleNewTaskView"></i>
-    </div>
-  </nav>
+
+   </nav>
+
   <div class="container-fluid">
     <div class="row">
       <div class="col-4 listcontainer" ref="listcontainer">
-        <div class="card scrollable-container">
+        <div class="card ">
         
-     
-       <ul class="list-group">
-          <li v-for="item in items" :key="item.id" class="list-group-item" >
-       
-            <label class="card-title" for="title"><h5>Title:</h5></label>
-             <input type="text" class="form-control" id="title" v-model="item.title" @input="updateTask(item.id)">
-           <label class="custom-control-label" for="description">Description:</label>
-             <input type="text" class="form-control" id="description" v-model="item.description" @input="updateTask(item.id)">
-          
-          <div class="custom-control custom-checkbox mb-2">
-          <input type="checkbox" class="custom-control-input"  v-model="item.status" @input="handleTaskSave(item.id)">
-          <label class="custom-control-label" for="customCheck1">&nbsp;Completed</label>
-        </div>
-            <button class="btn btn-secondary btn-sm mx-2" @click="deleteTask(item.id)">Delete Task</button>
+   
 
-            <button class="btn btn-secondary btn-sm" @click="updateTask(item.id)">Update Task</button>
+        <nav aria-label="Page navigation example">
+          <ul class="list-group pagination">
+          <li v-for="item in items" :key="item.id" class="list-group-item page-item" >
+            <form v-on:submit.prevent="updateTask(item)">
+            <label class="card-title" for="title"><h5>Title:</h5></label>
+            <input type="hidden" class="form-control" id="title" v-model="item.id">
+             <input type="text" class="form-control" id="title" v-model="item.title">
+           <label class="custom-control-label" for="description">Description:</label>
+             <input type="text" class="form-control" id="description" v-model="item.description" >
+          
+              <div class="custom-control custom-checkbox mb-2">
+              <input type="checkbox" class="custom-control-input"  v-model="item.status" value="item.status">
+              <label class="custom-control-label" for="customCheck1">&nbsp;Completed</label>
+              </div>
+            <button class="btn btn-secondary btn-sm mx-2" @click="deleteTask(item)">Delete Task</button>
+
+            <button type="submit" class="btn btn-secondary btn-sm mx-2" >Update Task</button>
+             </form>
           </li>
-       </ul>
+          </ul>
+          </nav>
+      
+       
         </div>
       </div>
+
       <div class="col-8">
-        <div id="informDiv"></div>
-        <input @keyup="handleTaskSave" class="form-control tasktitle" ref="tasktitle" placeholder="Task Title" maxlength="28" type="text" />
+      <form v-on:submit.prevent="saveTask">
+        <input required class="form-control tasktitle" v-model="title" ref="tasktitle" placeholder="Task Title" maxlength="28" type="text" />
         <br>
-        <textarea @keyup="handleTaskSave" class="tasktextarea"   ref="tasktextarea" placeholder="Task Description"></textarea>
- 
-        <button class="btn btn-secondary" @click="handleTaskSave">Save Task</button>
+        <textarea  class="tasktextarea"   v-model="description" placeholder="Task Description"></textarea>
+          <div class="custom-control custom-checkbox mb-2">
+          <input type="checkbox" class="custom-control-input"  v-model="status" >
+          <label class="custom-control-label" for="customCheck1">&nbsp;Completed</label>
+          </div>
+        <button type="submit" class="btn btn-secondary" >Save Task</button>
+      </form>
       </div>
+    
     </div>
   </div>
 </template>
